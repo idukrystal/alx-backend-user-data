@@ -18,3 +18,10 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     session_id = Column(String, nullable=True)
     reset_token = Column(String, nullable=True)
+
+    def __init__(self, id, email, hashed_password, session_id=None, reset_token=None):
+        self.id = id
+        self.email = email
+        self.hashed_password = hashed_password
+        self.session_id = session_id
+        self.reset_token = reset_token
