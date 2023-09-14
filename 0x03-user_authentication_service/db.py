@@ -48,3 +48,16 @@ class DB:
                 if getattr(user, key) == value:
                     return user
         raise NoResultFound
+
+    def update_user(self, user_id: int, **values) -> None:
+        """   updstes a users ddtails in d.b """
+        try:
+            user = self.find_user_by(id=user_id)
+            for key, value in values.items():
+                if hasattr(user, key):
+                    setattr(user, key, value)
+                else:
+                    raise valueError()
+            self._session.commit()
+        except NoResultFound:
+            raise valueError()
