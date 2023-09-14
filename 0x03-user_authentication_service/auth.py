@@ -2,6 +2,7 @@
 """ Module for user authentification """
 
 import bcrypt
+from uuid import uuid4
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
@@ -10,6 +11,11 @@ from sqlalchemy.orm.exc import NoResultFound
 def _hash_password(password: str) -> bytes:
     """  converts password to byte  """
     return (bcrypt.hashpw(bytes(password, "ascii"), bcrypt.gensalt(rounds=15)))
+
+
+def _generate_uuid() -> str:
+    """ generates unique uid's """
+    return str(uuid4())
 
 
 class Auth:
