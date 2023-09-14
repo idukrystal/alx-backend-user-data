@@ -9,7 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 def _hash_password(password: str) -> bytes:
     """  converts password to byte  """
-    return(bcrypt.hashpw(bytes(password, "ascii"), bcrypt.gensalt(rounds=15)))
+    return (bcrypt.hashpw(bytes(password, "ascii"), bcrypt.gensalt(rounds=15)))
 
 
 class Auth:
@@ -27,3 +27,13 @@ class Auth:
             raise ValueError(f"User {email} already exists")
         except NoResultFound:
             return self._db.add_user(email, _hash_password(password))
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """ Check if a valid login is made """
+        try:
+            user = self._db.find_user_by(email=email)
+            if bcrypt.checkpw(bytes(password, "ascii"), user.hashed_password):
+                return True
+            return False
+        except NoResultFound:
+            return False
