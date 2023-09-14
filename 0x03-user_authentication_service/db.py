@@ -49,24 +49,15 @@ class DB:
                     return user
         raise NoResultFound
 
-    def update_user(self, user_id: int, **kwargs) -> None:
-        """
-        Update a user's attributes
-        Args:
-            user_id (int): user's id
-            kwargs (dict): dict of key, value pairs representing the
-                           attributes to update and the values to update
-                           them with
-        Return:
-            No return value
-        """
+    def update_user(self, user_id: int, **values) -> None:
+        """   updstes a users ddtails in d.b """
         try:
-            usr = self.find_user_by(id=user_id)
+            user = self.find_user_by(id=user_id)
         except NoResultFound:
-            raise ValueError()
-        for k, v in kwargs.items():
-            if hasattr(usr, k):
-                setattr(usr, k, v)
+            raise valueError()
+        for key, value in values.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
             else:
-                raise ValueError
+                raise valueError
         self._session.commit()
