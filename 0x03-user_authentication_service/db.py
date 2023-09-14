@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""
-DB module
+"""DB module
 """
 from sqlalchemy import create_engine
+from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.exc import InvalidRequestError
-
 from user import Base, User
 
 
@@ -19,8 +17,7 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db",
-                                     echo=False)
+        self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -35,55 +32,35 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """
-        Create a User object and save it to the database
-        Args:
-            email (str): user's email address
-            hashed_password (str): password hashed by bcrypt's hashpw
-        Return:
-            Newly created User object
-        """
-        user = User(email=email, hashed_password=hashed_password)
+        """ Adds a new row to users table """
+        user = User(email, hashed_password)
         self._session.add(user)
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs) -> User:
-        """
-        Return a user who has an attribute matching the attributes passed
-        as arguments
-        Args:
-            attributes (dict): a dictionary of attributes to match the user
-        Return:
-            matching user or raise error
-        """
-        all_users = self._session.query(User)
-        for k, v in kwargs.items():
-            if k not in User.__dict__:
+    def find_user_by(self, **values) -> User:
+        """ Finds a row in table corespinding to argument """
+        result = self._session.query(User)
+        for key, value in values.items():
+            if key not in User.__dict__:
                 raise InvalidRequestError
-            for usr in all_users:
-                if getattr(usr, k) == v:
-                    return usr
+            for user in result:
+                if getattr(user, key) == value:
+                    return user
         raise NoResultFound
 
-    def update_user(self, user_id: int, **kwargs) -> None:
-        """
-        Update a user's attributes
-        Args:
-            user_id (int): user's id
-            kwargs (dict): dict of key, value pairs representing the
-                           attributes to update and the values to update
-                           them with
-        Return:
-            No return value
-        """
+    def update_user(self, user_id: int, **values) -> None:
+        """   updstes a users ddtails in d.b """
         try:
-            usr = self.find_user_by(id=user_id)
+            user = self.find_user_by(id=user_id)
+            print(user.hashed_password)
         except NoResultFound:
-            raise ValueError()
-        for k, v in kwargs.items():
-            if hasattr(usr, k):
-                setattr(usr, k, v)
+            raise valueError()
+        for key, value in values.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
             else:
-                raise ValueError
+                raise valueError()
         self._session.commit()
+        u = self.find_user_by(id=user_id)
+        print(u.hashed_password)
