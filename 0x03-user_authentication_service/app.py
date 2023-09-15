@@ -33,13 +33,11 @@ def login():
     password = request.form["password"]
     if Auth.valid_login(email, password):
         uid = Auth.create_session(email)
-        response = make_response(
-            jsonify({"email": f"{email}", "message": "logged in"})
-        )
+        response = jsonify({"email": f"{email}", "message": "logged in"})
         response.set_cookie("session_id", uid)
         return response
     else:
-        return abort(401)
+        abort(401)
 
 
 if __name__ == "__main__":
