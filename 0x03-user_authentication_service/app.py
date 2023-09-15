@@ -40,7 +40,6 @@ def login():
         return response
     else:
         return abort(401)
-    
 
 
 if __name__ == "__main__":
