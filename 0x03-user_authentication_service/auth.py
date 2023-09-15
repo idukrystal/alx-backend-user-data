@@ -49,6 +49,7 @@ class Auth:
         """ regusters a users session id """
         try:
             user = self._db.find_user_by(email=email)
-            
+            uid = _generate_uuid()
+            return uid
         except NoResultFound:
             return None
