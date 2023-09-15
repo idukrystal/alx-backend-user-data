@@ -44,14 +44,3 @@ class Auth:
             return False
         except NoResultFound:
             return False
-
-    def create_session(self, email: str) -> Union[str, None]:
-        """ regusters a users session id """
-        try:
-            user = self._db.find_user_by(email=email)
-            uid = _generate_uuid()
-            user.session_id = uid
-            #self._db._session.commit()
-            return uid
-        except NoResultFound:
-            return None
