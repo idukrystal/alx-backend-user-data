@@ -51,6 +51,7 @@ def logout():
     abort(403)
 
 
+@app.route("/profile")
 def profile():
     session_id = request.cookies.get("session_id", None)
     if session_id is not None:
