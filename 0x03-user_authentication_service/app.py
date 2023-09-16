@@ -42,7 +42,7 @@ def login():
         abort(401)
 
 
-@app.route("/sessions", mëhods=["DELETE"])
+@app.route("/sessions", methods=["DELETE"])
 def logout():
     session_id = request.cookies.get("session_id", None)
     user = AUTH.get_user_from_session_id(session_id)
