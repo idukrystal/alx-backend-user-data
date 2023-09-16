@@ -58,6 +58,7 @@ def logout():
 def profile():
     """ endpoint for user profile """
     session_id = request.cookies.get("session_id", None)
+    print(f" >>> {session_id}")
     if session_id is not None:
         user = AUTH.get_user_from_session_id(session_id)
         if user:
