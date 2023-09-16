@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 @app.route("/")
-@def index():
+def index():
     """ webapp hompage / index """
     return jsonify({"message": "Bienvenue"})
 
@@ -21,7 +21,7 @@ def users():
     password = request.form["password"]
 
     try:
-        user = Auth.register_user(email, password)
+        user = AUTH.register_user(email, password)
         return jsonify({"email": f"{user.email}", "message": "user created"})
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
@@ -33,8 +33,8 @@ def users():
 def login() -> str:
     email = request.form["email"]
     password = request.form["password"]
-    if Auth.valid_login(email, password):
-        uid = Auth.create_session(email)
+    if AUTH.valid_login(email, password):
+        uid = AUTH.create_session(email)
         response = jsonify({"email": f"{email}", "message": "logged in"})
         response.set_cookie("session_id", uid)
         return response
