@@ -84,7 +84,7 @@ def update_password():
             {"email": f"{email}", "message": "Password updated"}
         )
     except ValueError:
-        abort(403)
+        abort(401)
 
 
 if __name__ == "__main__":
