@@ -5,12 +5,12 @@ from flask import Flask, abort, jsonify, make_response, request
 from auth import Auth
 
 
-Auth = Auth()
+AUTH = Auth()
 app = Flask(__name__)
 
 
 @app.route("/")
-def index():
+@def index():
     """ webapp hompage / index """
     return jsonify({"message": "Bienvenue"})
 
