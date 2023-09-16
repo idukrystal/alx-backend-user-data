@@ -17,6 +17,7 @@ def index():
 
 @app.route("/users", methods=["POST"])
 def users():
+    """ endpoint for user signup"""
     email = request.form["email"]
     password = request.form["password"]
 
@@ -29,6 +30,7 @@ def users():
 
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
 def login():
+    """ endpoint for user login """
     email = request.form["email"]
     password = request.form["password"]
     if AUTH.valid_login(email, password):
@@ -42,6 +44,7 @@ def login():
 
 @app.route("/sessions", methods=["DELETE"])
 def logout():
+    """ endpoint for user logout """
     session_id = request.cookies.get("session_id", None)
     if session_id is not None:
         user = AUTH.get_user_from_session_id(session_id)
@@ -53,6 +56,7 @@ def logout():
 
 @app.route("/profile")
 def profile():
+    """ endpoint for user profile """
     session_id = request.cookies.get("session_id", None)
     if session_id is not None:
         user = AUTH.get_user_from_session_id(session_id)
@@ -63,6 +67,7 @@ def profile():
 
 @app.route("/reset_password", methods=["POST"])
 def get_reset_password_token():
+    """ endpoint for user password reset request """
     email = request.form["email"]
     try:
         token = AUTH.get_reset_password_token(email)
@@ -75,6 +80,7 @@ def get_reset_password_token():
 
 @app.route("/reset_password", methods=["PUT"])
 def update_password():
+    """ endpoint for user password change """
     email = request.form["email"]
     token = request.form["reset_token"]
     password = request.form["password"]
