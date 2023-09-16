@@ -69,3 +69,13 @@ class Auth:
             self._db.update_user(user_id, session_id=None)
         except ValueError:
             return
+
+    def get_reset_password_token(self, email: str) -> str:
+        """ generates a password reset token """
+        try:
+            user = self._db.find_user_by(email=email)
+            uid = _generate_uuid()
+            self.update_user(reset_token=uid)
+            return uid
+        except NoResultFound:
+            return ValueError
